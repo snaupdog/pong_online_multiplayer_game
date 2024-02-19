@@ -51,32 +51,8 @@ class Game:
         else:
             self.y2 = self.y2
 
-class Ball:
-    MAXVEL = 8
-    COLOR = (120,210,012)   # change to pinkish later
-
-    def __init__(self, x, y, radius):
-        self.x = self.origx = x
-        self.y = self.origy = y
-        self.radius = radius
-        self.x_vel = self.MAXVEL
-        self.y_vel = 0
-
-    def draw(self, win):
-        pygame.draw.circle(win, self.COLOR, (self.x, self.y), self.radius)
-
-    def move(self):
-        self.x += self.x_vel
-        self.y += self.y_vel
-
-    def reset(self):
-        self.x = self.origx
-        self.y = self.origy
-        self.y_vel = 0
-        self.x_vel *= -1
 
 dataaa = Game(200, 200, 400, 400, 0, 0)
-ball = Ball(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, BALL_RADIUS)
 
 
 def process_positions(player_1, player_2):
@@ -109,13 +85,10 @@ while True:
     # first time sends default original values in array
 
     data_arr = pickle.dumps(dataaa)
-    ball_data = pickle.dumps(ball)
-    data = [data_arr,ball_data]
+
     connection[0].send(data_arr)
     connection[1].send(data_arr)
 
-    connection[0].send(ball_data)
-    connection[1].send(ball_data)
     # receives and array with info [key_up,key_down(boolean)]
     player1, player2 = recieve_information()
 

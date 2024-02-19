@@ -50,10 +50,10 @@ class Game:
 
 def draw_paddles(x, y, p, info):
     if p == 1:
-        pygame.draw.rect(win, WHITE, [x, y, 10, 60])
+        pygame.draw.rect(win, (100, 100, 100), [x, y, 10, 60])
         # win.blit(bong, (paddles[0].x - 45, paddles[0].y - 35))
     if p == 2:
-        pygame.draw.rect(win, WHITE, [x, y, 10, 60])
+        pygame.draw.rect(win, (200, 200, 200), [x, y, 10, 60])
         # win.blit(bogn, (paddles[1].x -110, paddles[1].y-35))
 
     info.blitty(bong, bogn)
