@@ -15,53 +15,61 @@ ball_x_speed = 4
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 5
 
+pwidth, pheight = 20, 100
+
 
 class Game:
     def __init__(self, y1, y2, by, bx, sc1, sc2):
         self.y1 = y1
         self.y2 = y2
-        self.by = by
-        self.bx = bx
         self.sc1 = 0
         self.sc2 = 0
 
+        self.by = by
+        self.bx = bx
+
         self.check = False
-        self.paddle_velocity = 4
-        self.paddle_width = 20
-        self.paddle_height = 100
+        self.paddle_velocity = 1
         self.ball_radius = 5
 
     def update_paddle(self, player_1, player_2):
 
         if player_1[0] == True:
-            self.y1 -= 1
+            self.y1 -= self.paddle_velocity
         else:
             self.y1 = self.y1
         if player_1[1] == True:
-            self.y1 += 1
+            self.y1 += self.paddle_velocity
+
         else:
             self.y1 = self.y1
 
         if player_2[0] == True:
-            self.y2 -= 1
+            self.y2 -= self.paddle_velocity
+
         else:
             self.y2 = self.y2
         if player_2[1] == True:
-            self.y2 += 1
+            self.y2 += self.paddle_velocity
+
         else:
             self.y2 = self.y2
 
 
-dataaa = Game(200, 200, 400, 400, 0, 0)
+dataaa = Game(
+    SCREEN_HEIGHT // 2 - pheight // 2,
+    SCREEN_WIDTH // 2 - pheight // 2,
+    SCREEN_HEIGHT // 2,
+    SCREEN_WIDTH // 2,
+    0,
+    0,
+)
 
 
 def process_positions(player_1, player_2):
 
     global ball_y_speed, ball_x_speed
     dataaa.update_paddle(player_1, player_2)
-
-    print(dataaa.bx)
-    print(dataaa.by)
 
 
 def waiting_for_connections():

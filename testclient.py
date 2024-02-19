@@ -14,6 +14,9 @@ PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+
+pwidth, pheight = 20, 100
+
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Pong Apparently')
 
@@ -35,28 +38,21 @@ class Game:
     def __init__(self, y1, y2, by, bx, sc1, sc2):
         self.y1 = y1
         self.y2 = y2
+
         self.by = by
         self.bx = bx
+
         self.sc1 = 0
         self.sc2 = 0
-        self.x1 = 10
-        self.x2 = SCREEN_WIDTH - 20
-
-    def blitty(self, bong, bogn):
-        # need to fix this shit
-        win.blit(bong, (10 - 100, 20 - 35))
-        win.blit(bogn, (10 - 110, 20 - 35))
 
 
 def draw_paddles(x, y, p, info):
     if p == 1:
-        pygame.draw.rect(win, (100, 100, 100), [x, y, 10, 60])
-        # win.blit(bong, (paddles[0].x - 45, paddles[0].y - 35))
+        pygame.draw.rect(win, (100, 100, 100), (x, y, pwidth, pheight))
+        win.blit(bong, (x - 45, y - 35))
     if p == 2:
-        pygame.draw.rect(win, (200, 200, 200), [x, y, 10, 60])
-        # win.blit(bogn, (paddles[1].x -110, paddles[1].y-35))
-
-    info.blitty(bong, bogn)
+        pygame.draw.rect(win, (200, 200, 200), (x, y, pwidth, pheight))
+        win.blit(bogn, (x - 110, y - 35))
 
 
 def draw_ball(x, y):
@@ -79,7 +75,7 @@ def display():
         # recieve game object and update ball position and bat position on screen
         win.fill(PINKISH)
         draw_paddles(10, info.y1, 1, info)
-        draw_paddles(300, info.y2, 2, info)
+        draw_paddles(SCREEN_WIDTH - 10 - pwidth, info.y2, 2, info)
         draw_ball(info.bx, info.by)
 
         pygame.display.update()
