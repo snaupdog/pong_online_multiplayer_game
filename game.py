@@ -1,4 +1,4 @@
-class dataaa:
+class Ball:
     MAXVEL = 8
     COLOR = WHITE   # change to pinkish later
 
@@ -23,33 +23,53 @@ class dataaa:
         self.x_vel *= -1
 
 
-def collisions(dataaa, left, right):
+def draw(win, paddles, bong, bogn, ball, bolll, leftscr, rightscr):
+    win.fill(PINKISH)
+
+    leftscore = scorefont.render(f'{leftscr}', 1, WHITE)
+    rightscore = scorefont.render(f'{rightscr}', 1, WHITE)
+    win.blit(leftscore, (width // 4 - leftscore.get_width() // 2, 20))
+    win.blit(rightscore, (width * (3 / 4) - rightscore.get_width() // 2, 20))
+
+    for paddle in paddles:
+        paddle.draw(win)
+
+    ball.draw(win)
+
+    win.blit(bong, (paddles[0].x - 45, paddles[0].y - 35))
+    win.blit(bogn, (paddles[1].x - 110, paddles[1].y - 35))
+    win.blit(bolll, (ball.x - 123, ball.y - 120))
+
+    pygame.display.update()
+
+
+def collisions(ball, left, right):
     # for ceil colls
-    if dataaa.by + ball.radius >= SCREEN_HEIGHT:
-        dataaa.y_vel *= -1
-    elif dataaa.by - ball.radius <= 0:
-        dataaa.y_vel *= -1
+    if ball.y + ball.radius >= height:
+        ball.y_vel *= -1
+    elif ball.y - ball.radius <= 0:
+        ball.y_vel *= -1
 
     # for left colls
-    if dataaa.x_vel < 0:
-        if dataaa.by >= self.y1 and ball.by <= self.y1 + left.SCREEN_HEIGHT:
-            if dataaa.x - ball.radius <= left.x + left.width:
-                dataaa.x_vel *= -1
+    if ball.x_vel < 0:
+        if ball.y >= left.y and ball.y <= left.y + left.height:
+            if ball.x - ball.radius <= left.x + left.width:
+                ball.x_vel *= -1
 
-                midy = self.y1 + left.SCREEN_HEIGHT / 2
-                diffy = midy - dataaa.by
-                reduced = (left.SCREEN_HEIGHT / 2) / dataaa.MAXVEL
+                midy = left.y + left.height / 2
+                diffy = midy - ball.y
+                reduced = (left.height / 2) / ball.MAXVEL
                 y_vel = diffy / reduced
-                dataaa.y_vel = y_vel * -1
+                ball.y_vel = y_vel * -1
 
     # for right cols
     else:
-        if dataaa.by >= self.y2 and ball.by <= self.y2 + right.SCREEN_HEIGHT:
-            if dataaa.x + ball.radius >= right.x:
-                dataaa.x_vel *= -1
+        if ball.y >= right.y and ball.y <= right.y + right.height:
+            if ball.x + ball.radius >= right.x:
+                ball.x_vel *= -1
 
-                midy = self.y2 + right.SCREEN_HEIGHT / 2
-                diffy = midy - dataaa.y
-                reduced = (right.SCREEN_HEIGHT / 2) / dataaa.MAXVEL
+                midy = right.y + right.height / 2
+                diffy = midy - ball.y
+                reduced = (right.height / 2) / ball.MAXVEL
                 y_vel = diffy / reduced
-                dataaa.y_vel = y_vel * -1
+                ball.y_vel = y_vel * -1
