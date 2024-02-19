@@ -6,7 +6,7 @@ pwidth, pheight = 20, 100
 
 class Game:
 
-    MAXVEL = 4
+    MAXVEL = 5
 
     def __init__(self, y1, y2, by, bx, sc1, sc2):
         self.y1 = y1
@@ -16,8 +16,8 @@ class Game:
         self.sc1 = 0
         self.sc2 = 0
 
-        self.by = self.origx = by
-        self.bx = self.origy = bx
+        self.by = self.origy = by
+        self.bx = self.origx = bx
 
         self.x_vel = self.MAXVEL
         self.y_vel = 0
@@ -88,11 +88,13 @@ class Game:
                     self.y_vel = self.y_vel * -1
         else:
             if self.by >= self.y2 and self.by <= self.y2 + pheight:
-                if self.bx - self.radius <= self.x2 + pwidth:
+                # prob X2 value
+                if self.bx + self.radius >= self.x2:
                     self.x_vel *= -1
+
                     midy = self.y2 + pheight / 2
                     diffy = midy - self.by
                     reduced = (pheight / 2) / self.MAXVEL
-                    self.y_vel = diffy / reduced
-                    self.y_vel = self.y_vel * -1
+                    y_vel = diffy / reduced
+                    self.y_vel = y_vel * -1
         self.move()
