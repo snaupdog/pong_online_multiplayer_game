@@ -3,15 +3,18 @@
 import pickle
 import random
 import socket
+import threading
 import time
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.bind(("localhost", 8000))
 serversocket.listen(2)
+
 arr = [400,400,400,400,0,0]
+
 connection = []
-ball_y_speed = 1
-ball_x_speed = 1
+ball_y_speed = 4
+ball_x_speed = 4
 
 
 
@@ -109,14 +112,17 @@ def recieve_information():
     return player_1_info, player_2_info
 
 
+
 while True:
     waiting_for_connections()
+    #first time sends default original values in array
 
     data_arr = pickle.dumps(arr)
-    # print(data_arr)
     connection[0].send(data_arr)
     connection[1].send(data_arr)
 
+    # receives and array with info [key_up,key_down(boolean)]
     player1, player2 = recieve_information()
+    
 
     arr = process_positions(arr,player1, player2)

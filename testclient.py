@@ -1,4 +1,4 @@
-
+import os
 import pickle
 import socket
 import time
@@ -6,64 +6,81 @@ import time
 import pygame
 
 pygame.init()
+SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
+BALL_RADIUS = 5
 
-RED = (255, 0, 0)
+
+PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-GREEN = (0,255,0)
 
-display_width = 800
-display_height = 600
+win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption('Pong Apparently')
 
-clock = pygame.time.Clock()
+bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
+bong = pygame.transform.scale(bong_img, (150, 150))
 
-gameDisplay = pygame.display.set_mode((display_width, display_height))
+bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
+bogn = pygame.transform.scale(bogn_img, (150, 150))
+
+bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
+bolll = pygame.transform.scale(bolll_img, (330, 330))
+
 
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientsocket.connect(("localhost", 8000))
+clientsocket.connect(('localhost', 8000))
 
 
-def message_display(text,x,y):
-    largeText = pygame.font.Font('freesansbold.ttf',45)
-    TextSurf, TextRect = text_objects(str(text), largeText, GREEN)
-    TextRect.center = ((x),(y))
-    gameDisplay.blit(TextSurf, TextRect)
+class Game:
+    def __init__(self, y1, y2, by, bx, sc1, sc2):
+        self.y1 = y1
+        self.y2 = y2
+        self.by = by
+        self.bx = bx
+        self.sc1 = 0
+        self.sc2 = 0
+        self.x1 = 10
+        self.x2 = SCREEN_WIDTH - 20
 
-    pygame.display.update()
+    def blitty(self, bong, bogn):
+        # need to fix this shit
+        win.blit(bong, (10 - 100, 20 - 35))
+        win.blit(bogn, (10 - 110, 20 - 35))
 
-def text_objects(text, font, colour):
-    textSurface = font.render(text, True, colour)
-    return textSurface, textSurface.get_rect()
+
+def draw_paddles(x, y, p, info):
+    if p == 1:
+        pygame.draw.rect(win, WHITE, [x, y, 10, 60])
+        # win.blit(bong, (paddles[0].x - 45, paddles[0].y - 35))
+    if p == 2:
+        pygame.draw.rect(win, WHITE, [x, y, 10, 60])
+        # win.blit(bogn, (paddles[1].x -110, paddles[1].y-35))
+
+    info.blitty(bong, bogn)
+
+
+def draw_ball(x, y):
+    pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
 
 
 def recieve_data():
+    # this should ideally return a game object
     data = clientsocket.recv(1024)
     data = pickle.loads(data)
-
     return data
 
-def draw_paddles(x,y,p):
-    if p == 1:
-        pygame.draw.rect(gameDisplay, RED, [x, y, 10, 60])
-    if p == 2:
-        pygame.draw.rect(gameDisplay, BLUE, [x, y, 10, 60])
-
-def draw_ball(x,y):
-    pygame.draw.circle(gameDisplay, BLACK, [x,y], 5)
 
 def display():
     game_finished = False
-    data = []
     key_up = False
     key_down = False
     while game_finished == False:
         info = recieve_data()
-        gameDisplay.fill(WHITE)
-        draw_paddles(10, info[0], 1)
-        draw_paddles(display_width-20, info[1], 2)
-        draw_ball(info[3], info[2])
+        # recieve game object and update ball position and bat position on screen
+        win.fill(PINKISH)
+        draw_paddles(10, info.y1, 1, info)
+        draw_paddles(300, info.y2, 2, info)
+        draw_ball(info.bx, info.by)
 
         pygame.display.update()
 
@@ -81,12 +98,10 @@ def display():
 
         arr = [key_up, key_down]
         data_arr = pickle.dumps(arr)
+        # send key up and key down to server for processing
         clientsocket.send(data_arr)
-        message_display(info[4], 250, 300)
-        message_display(info[5], 550, 300)
 
-
-    #info = [player_1_y, player_2_y, ball_y, ball_x, score_1, score_2]
+    # info = [player_1_y, player_2_y, ball_y, ball_x, score_1, score_2]
 
 
 display()
