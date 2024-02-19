@@ -1,0 +1,9 @@
+SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
+BALL_RADIUS = 5
+
+pwidth, pheight = 20, 100
+
+
+PINKISH = (250, 100, 100)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
