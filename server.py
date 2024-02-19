@@ -1,6 +1,7 @@
 import pickle
 import random
 import socket
+import time
 
 import pygame
 
@@ -11,8 +12,6 @@ serversocket.bind(('localhost', 8000))
 serversocket.listen(2)
 
 connection = []
-ball_y_speed = 4
-ball_x_speed = 4
 
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 5
@@ -50,8 +49,7 @@ def recieve_information():
     return player_1_info, player_2_info
 
 
-print(dataaa.check)
-
+last_print_time = time.time()
 
 while True:
     waiting_for_connections()
@@ -66,3 +64,11 @@ while True:
     player1, player2 = recieve_information()
 
     process_positions(player1, player2)
+
+    # Print "hello" every 5 seconds
+    current_time = time.time()
+    if current_time - last_print_time >= 5:
+        print(
+            f'this is player 1 : - {dataaa.sc1}\nthis is player 2 : - {dataaa.sc2}'
+        )
+        last_print_time = current_time
