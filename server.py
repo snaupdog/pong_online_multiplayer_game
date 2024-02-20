@@ -21,7 +21,7 @@ pwidth, pheight = 20, 100
 
 dataaa = Game(
     SCREEN_HEIGHT // 2 - pheight // 2,
-    SCREEN_WIDTH // 2 - pheight // 2,
+    SCREEN_HEIGHT // 2 - pheight // 2,
     SCREEN_HEIGHT // 2,
     SCREEN_WIDTH // 2,
     0,
