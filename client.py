@@ -9,8 +9,8 @@ from pygame.locals import *
 
 from gameobj import Game
 
-# mixer.init()
-# mixer.music.load('assets/bg_music.wav')
+mixer.init()
+mixer.music.load('assets/bg_music.wav')
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
@@ -44,7 +44,7 @@ def draw_paddles(x, y, p, info):
         win.blit(bong, (x - 45, y - 35))
     if p == 2:
         pygame.draw.rect(win, (200, 200, 200), (x, y, pwidth, pheight))
-        win.blit(bogn, (x - 110, y - 35))
+        win.blit(bogn, (x - 105, y - 35))
 
 
 def draw_ball(x, y):
@@ -64,29 +64,39 @@ bg_img = pygame.image.load('assets/bg.png')
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientsocket.connect(('10.1.18.2', 8000))
 
-scorefont = pygame.font.SysFont('comicsans', 50)
-text = scorefont.render('STARTING SOON', 1, WHITE)
+hitSound = pygame.mixer.Sound('hit.mp3')
+
+
+def checkscoreupdate(prev_ball_x, prev_ball_y, current_ball_x, current_ball_y):
+    if (prev_ball_x != current_ball_x) or (prev_ball_y != current_ball_y):
+        hitSound.play()
 
 
 def main():
-    Starting_screen = True
     game_finished = False
     key_up = False
     key_down = False
+    prev_count1 = 0
+    prev_count2 = 0
 
-    # mixer.music.play()
+    pygame.mixer.music.play(-1)
     while game_finished == False:
         # waits for other client here
         info = recieve_data()
 
-        win.fill(PINKISH)
-        # win.blit(bg_img, (0, 0))
+        # win.fill(PINKISH)
+        win.blit(bg_img, (0, 0))
 
-        draw_paddles(10, info.y1, 1, info)
-        draw_paddles(SCREEN_WIDTH - 10 - pwidth, info.y2, 2, info)
+        draw_paddles(30, info[0], 1, info)
+        draw_paddles(SCREEN_WIDTH - 30 - pwidth, info[1], 2, info)
 
-        draw_ball(info.bx, info.by)
+        draw_ball(info[2], info[3])
+        # we can also di if score is updated instead
+        # of sending another value
+        checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
+        prev_count1, prev_count2 = info[4], info[5]
 
+        print()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
@@ -102,7 +112,6 @@ def main():
         arr = [key_up, key_down]
         data_arr = pickle.dumps(arr)
         clientsocket.send(data_arr)
-        Starting_screen = False
 
         pygame.display.update()
 

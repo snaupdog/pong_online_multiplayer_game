@@ -24,13 +24,14 @@ class Game:
         self.radius = 5
 
         self.check = False
-        self.paddle_velocity = 3
+        self.paddle_velocity = 5
 
     def reset(self):
         self.bx = self.origx
         self.by = self.origy
         self.y_vel = 0
         self.x_vel *= -1
+        self.hit = False
 
     def update_paddle(self, player_1, player_2):
 
@@ -58,9 +59,11 @@ class Game:
     def checkreset(self):
         if self.bx < 0:
             self.sc2 += 1
+            self.hit = True
             self.reset()
         elif self.bx > SCREEN_WIDTH:
             self.sc1 += 1
+            self.hit = True
             self.reset()
 
     def move(self):
@@ -86,6 +89,7 @@ class Game:
                     reduced = (pheight / 2) / self.MAXVEL
                     self.y_vel = diffy / reduced
                     self.y_vel = self.y_vel * -1
+
         else:
             if self.by >= self.y2 and self.by <= self.y2 + pheight:
                 # prob X2 value

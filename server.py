@@ -54,8 +54,16 @@ last_print_time = time.time()
 while True:
     waiting_for_connections()
     # first time sends default original values in array
+    tuppyp = (
+        dataaa.y1,
+        dataaa.y2,
+        dataaa.bx,
+        dataaa.by,
+        dataaa.sc1,
+        dataaa.sc2,
+    )
 
-    data_arr = pickle.dumps(dataaa)
+    data_arr = pickle.dumps(tuppyp)
 
     connection[0].send(data_arr)
     connection[1].send(data_arr)
