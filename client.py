@@ -9,8 +9,8 @@ from pygame.locals import *
 
 from gameobj import Game
 
-mixer.init()
-mixer.music.load('assets/bg_music.wav')
+# mixer.init()
+# mixer.music.load('assets/bg_music.wav')
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
@@ -62,7 +62,7 @@ bg_img = pygame.image.load('assets/bg.png')
 
 
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientsocket.connect(('localhost', 8000))
+clientsocket.connect(('10.1.18.2', 8000))
 
 scorefont = pygame.font.SysFont('comicsans', 50)
 text = scorefont.render('STARTING SOON', 1, WHITE)
@@ -74,13 +74,13 @@ def main():
     key_up = False
     key_down = False
 
-    mixer.music.play()
+    # mixer.music.play()
     while game_finished == False:
         # waits for other client here
         info = recieve_data()
 
-        # win.fill(PINKISH)
-        win.blit(bg_img, (0, 0))
+        win.fill(PINKISH)
+        # win.blit(bg_img, (0, 0))
 
         draw_paddles(10, info.y1, 1, info)
         draw_paddles(SCREEN_WIDTH - 10 - pwidth, info.y2, 2, info)

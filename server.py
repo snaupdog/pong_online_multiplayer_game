@@ -8,7 +8,7 @@ import pygame
 from gameobj import Game
 
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind(('localhost', 8000))
+serversocket.bind(('10.1.18.2', 8000))
 serversocket.listen(2)
 
 connection = []
