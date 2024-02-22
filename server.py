@@ -9,6 +9,7 @@ from gameobj import Game
 
 SERVER_IP = "10.14.143.190"
 PORT = 8000
+
 BUFFER_SIZE = 4000
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.bind((SERVER_IP, PORT))

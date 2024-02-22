@@ -24,7 +24,7 @@ class Game:
         self.radius = 5
 
         self.check = False
-        self.paddle_velocity = 5
+        self.paddle_velocity = 1
 
     def reset(self):
         self.bx = self.origx

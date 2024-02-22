@@ -15,7 +15,7 @@ from gameobj import Game
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
-BALL_RADIUS = 5
+BALL_RADIUS = 10
 
 BUFFER_SIZE = 4000
 
@@ -34,7 +34,7 @@ PORT = 8000
 pwidth, pheight = 20, 100
 
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Pong Apparently")
+pygame.display.set_caption(f"Left:{leftscore}                                        Right:{rightscore}")
 
 
 # bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
@@ -61,11 +61,17 @@ def draw_ball(x, y):
 
 
 def update_score(x):
-    global leftscore, rightscore, won
+    global leftscore, rightscore, won,winscore
     if x < 0:
         rightscore += 1
+
     elif x > SCREEN_WIDTH:
         leftscore += 1
+
+
+    print(x)
+    print(leftscore)
+    print(rightscore)
 
     if leftscore >= winscore:
         won = True
@@ -80,13 +86,6 @@ def update_score(x):
         pygame.display.update()
         pygame.time.delay(2000)
         ball.reset()
-
-
-
-
-
-
-
 
 
     # if x<0:
