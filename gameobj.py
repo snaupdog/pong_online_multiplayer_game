@@ -6,7 +6,7 @@ pwidth, pheight = 20, 100
 
 class Game:
 
-    MAXVEL = 1
+    MAXVEL = 4
 
     def __init__(
         self,
