@@ -69,15 +69,11 @@ def update_score(x):
     global leftscore, rightscore, won, winscore
     if x <= 0:
         rightscore += 1
-        print(x)
-        print(leftscore)
-        print(rightscore)
+        hitSound.play()
 
     elif x >= SCREEN_WIDTH:
         leftscore += 1
-        print(x)
-        print(leftscore)
-        print(rightscore)
+        hitSound.play()
 
     left_score_text = scorefont.render(str(leftscore), True, WHITE)
     right_score_text = scorefont.render(str(rightscore), True, WHITE)
@@ -96,10 +92,6 @@ def update_score(x):
             SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2,
         ),
     )
-
-    # print(x)
-    # print(leftscore)
-    # print(rightscore)
 
     if leftscore >= winscore:
         won = True
@@ -120,28 +112,8 @@ def update_score(x):
         pygame.display.update()
         pygame.time.delay(2000)
 
-    # if x<0:
-    #     rightscore+=1
-    # elif x>SCREEN_WIDTH:
-    #     leftscore+=1
-    #
-    # if leftscore >= winscore:
-    #     won = True
-    #     wintext = "Left Player Won!"
-    # elif rightscore >= winscore:
-    #     won = True
-    #     wintext = "Right Player Won!"
-    #
-    # if won:
-    #     text = scorefont.render(wintext, 1, WHITE)
-    #     win.blit(text, (SCREEN_WIDTH//2 - text.get_width() //2, SCREEN_HEIGHT//2 - text.get_height()//2))
-    #     pygame.display.update()
-    #     pygame.time.delay(2000)
-    #     ball.reset()
-
 
 def recieve_data():
-    # this should ideally return a game object
     int_data = client_socket.recv(BUFFER_SIZE)
 
     data = struct.unpack("!4f", int_data)
@@ -153,33 +125,25 @@ def recieve_data():
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Create an SSL context
 ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
 ssl_context.load_verify_locations("server.crt")
 
-# Wrap the socket with SSL
 client_socket = ssl_context.wrap_socket(client_socket, server_hostname="snauman")
 
 server_address = (SERVER_IP, 12345)
 client_socket.connect(server_address)
 
-# hitSound = pygame.mixer.Sound('hit.mp3')
-
-
-# def checkscoreupdate(prev_ball_x, prev_ball_y, current_ball_x, current_ball_y):
-#     if (prev_ball_x != current_ball_x) or (prev_ball_y != current_ball_y):
-#         hitSound.play()
-#
+hitSound = pygame.mixer.Sound("assets/hit.mp3")
 
 
 def main():
     game_finished = False
     key_up = False
     key_down = False
-    # prev_count1 = 0
-    # prev_count2 = 0
 
+    # background music
     # pygame.mixer.music.play(-1)
+
     while game_finished == False:
         # waits for other client here
         info = recieve_data()
@@ -192,10 +156,6 @@ def main():
 
         draw_ball(info[2], info[3])
         update_score(info[2])
-        # we can also di if score is updated instead
-        # of sending another value
-        # checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
-        # prev_count1, prev_count2 = info[4], info[5]
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -215,7 +175,5 @@ def main():
 
         pygame.display.update()
 
-
-# main()
 
 main()
