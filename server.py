@@ -7,10 +7,11 @@ import pygame
 
 from gameobj import Game
 
-SERVER_IP = "10.14.142.97"
-BUFFER_SIZE = 1028
+SERVER_IP = "10.14.143.190"
+PORT = 8000
+BUFFER_SIZE = 4000
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind((SERVER_IP, 8000))
+serversocket.bind((SERVER_IP, PORT))
 serversocket.listen(2)
 
 connection = []
@@ -61,8 +62,6 @@ while True:
         dataaa.y2,
         dataaa.bx,
         dataaa.by,
-        dataaa.sc1,
-        dataaa.sc2
     ]
 
     print(int_data)

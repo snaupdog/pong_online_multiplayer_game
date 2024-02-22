@@ -17,7 +17,7 @@ pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 5
 
-BUFFER_SIZE = 5000
+BUFFER_SIZE = 4000
 
 PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
@@ -27,6 +27,8 @@ rightscore = 0
 won = False
 scorefont = pygame.font.SysFont("comicsans",50)
 winscore = 2
+SERVER_IP = "10.14.143.190"
+PORT = 8000
 
 
 pwidth, pheight = 20, 100
@@ -57,11 +59,13 @@ def draw_paddles(x, y, p, info):
 def draw_ball(x, y):
     pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
 
+
 def update_score(x):
-    if x<0:
-        rightscore+=1
-    elif x>SCREEN_WIDTH:
-        leftscore+=1
+    global leftscore, rightscore, won
+    if x < 0:
+        rightscore += 1
+    elif x > SCREEN_WIDTH:
+        leftscore += 1
 
     if leftscore >= winscore:
         won = True
@@ -72,10 +76,37 @@ def update_score(x):
 
     if won:
         text = scorefont.render(wintext, 1, WHITE)
-        win.blit(text, (SCREEN_WIDTH//2 - text.get_width() //2, SCREEN_HEIGHT//2 - text.get_height()//2))
+        win.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
         pygame.display.update()
         pygame.time.delay(2000)
         ball.reset()
+
+
+
+
+
+
+
+
+
+    # if x<0:
+    #     rightscore+=1
+    # elif x>SCREEN_WIDTH:
+    #     leftscore+=1
+    #
+    # if leftscore >= winscore:
+    #     won = True
+    #     wintext = "Left Player Won!"
+    # elif rightscore >= winscore:
+    #     won = True
+    #     wintext = "Right Player Won!"
+    #
+    # if won:
+    #     text = scorefont.render(wintext, 1, WHITE)
+    #     win.blit(text, (SCREEN_WIDTH//2 - text.get_width() //2, SCREEN_HEIGHT//2 - text.get_height()//2))
+    #     pygame.display.update()
+    #     pygame.time.delay(2000)
+    #     ball.reset()
         
 
 
@@ -90,9 +121,8 @@ def recieve_data():
 # bg_img = pygame.image.load('assets/bg.png')
 
 
-SERVER_IP = "10.14.142.97"
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientsocket.connect((SERVER_IP, 8000))
+clientsocket.connect((SERVER_IP, PORT))
 
 # hitSound = pygame.mixer.Sound('hit.mp3')
 
