@@ -1,5 +1,6 @@
 import random
 import socket
+import ssl
 import struct
 import time
 
@@ -7,13 +8,24 @@ import pygame
 
 from gameobj import Game
 
-SERVER_IP = "10.14.143.190"
-PORT = 8000
-
 BUFFER_SIZE = 4000
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind((SERVER_IP, PORT))
-serversocket.listen(2)
+
+SERVER_IP = "10.14.142.97"
+# SERVER_IP = "localhost"
+# PORT = 8000
+
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = (SERVER_IP, 12345)
+server_socket.bind(server_address)
+
+
+ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+ssl_context.load_cert_chain(certfile="server.crt", keyfile="server.key")
+
+server_socket = ssl_context.wrap_socket(server_socket, server_side=True)
+
+server_socket.listen(2)
 
 connection = []
 
@@ -38,9 +50,10 @@ def process_positions(player_1, player_2):
     dataaa.update_paddle(player_1, player_2)
     dataaa.collisions()
 
+
 def waiting_for_connections():
     while len(connection) < 2:
-        conn, addr = serversocket.accept()
+        conn, addr = server_socket.accept()
         connection.append(conn)
 
 

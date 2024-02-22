@@ -1,6 +1,7 @@
 import os
 import pickle
 import socket
+import ssl
 import struct
 import time
 
@@ -27,10 +28,11 @@ rightscore = 0
 # global leftscore = 0
 # global rightscore = 0
 won = False
-scorefont = pygame.font.SysFont("comicsans",50)
+scorefont = pygame.font.SysFont("comicsans", 50)
 winscore = 2
-SERVER_IP = "10.14.143.190"
-PORT = 8000
+
+SERVER_IP = "10.14.142.97"
+# SERVER_IP = "localhost"
 
 
 pwidth, pheight = 20, 100
@@ -39,13 +41,13 @@ win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pong Apparently")
 
 
-bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
+bong_img = pygame.image.load(os.path.join("assets", "bong.png"))
 bong = pygame.transform.scale(bong_img, (150, 150))
 
-bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
+bogn_img = pygame.image.load(os.path.join("assets", "bogn.png"))
 bogn = pygame.transform.scale(bogn_img, (150, 150))
 
-bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
+bolll_img = pygame.image.load(os.path.join("assets", "balll.png"))
 bolll = pygame.transform.scale(bolll_img, (330, 330))
 
 
@@ -58,14 +60,13 @@ def draw_paddles(x, y, p, info):
         win.blit(bogn, (x - 112, y - 35))
 
 
-
 def draw_ball(x, y):
     pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
-    win.blit(bolll,(x -123,y-120))
+    win.blit(bolll, (x - 123, y - 120))
 
 
 def update_score(x):
-    global leftscore, rightscore, won,winscore
+    global leftscore, rightscore, won, winscore
     if x <= 0:
         rightscore += 1
         print(x)
@@ -81,9 +82,21 @@ def update_score(x):
     left_score_text = scorefont.render(str(leftscore), True, WHITE)
     right_score_text = scorefont.render(str(rightscore), True, WHITE)
 
-    win.blit(left_score_text, (SCREEN_WIDTH // 2 - 24*left_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - left_score_text.get_height() // 2))
-    win.blit(right_score_text, (SCREEN_WIDTH // 2 + 20*right_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2))
-    
+    win.blit(
+        left_score_text,
+        (
+            SCREEN_WIDTH // 2 - 24 * left_score_text.get_width() // 2,
+            SCREEN_HEIGHT // 2 - left_score_text.get_height() // 2,
+        ),
+    )
+    win.blit(
+        right_score_text,
+        (
+            SCREEN_WIDTH // 2 + 20 * right_score_text.get_width() // 2,
+            SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2,
+        ),
+    )
+
     # print(x)
     # print(leftscore)
     # print(rightscore)
@@ -97,10 +110,15 @@ def update_score(x):
 
     if won:
         text = scorefont.render(wintext, 1, WHITE)
-        win.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
+        win.blit(
+            text,
+            (
+                SCREEN_WIDTH // 2 - text.get_width() // 2,
+                SCREEN_HEIGHT // 2 - text.get_height() // 2,
+            ),
+        )
         pygame.display.update()
         pygame.time.delay(2000)
-
 
     # if x<0:
     #     rightscore+=1
@@ -120,12 +138,11 @@ def update_score(x):
     #     pygame.display.update()
     #     pygame.time.delay(2000)
     #     ball.reset()
-        
 
 
 def recieve_data():
     # this should ideally return a game object
-    int_data = clientsocket.recv(BUFFER_SIZE)
+    int_data = client_socket.recv(BUFFER_SIZE)
 
     data = struct.unpack("!4f", int_data)
     return data
@@ -134,8 +151,17 @@ def recieve_data():
 # bg_img = pygame.image.load('assets/bg.png')
 
 
-clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientsocket.connect((SERVER_IP, PORT))
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Create an SSL context
+ssl_context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+ssl_context.load_verify_locations("server.crt")
+
+# Wrap the socket with SSL
+client_socket = ssl_context.wrap_socket(client_socket, server_hostname="snauman")
+
+server_address = (SERVER_IP, 12345)
+client_socket.connect(server_address)
 
 # hitSound = pygame.mixer.Sound('hit.mp3')
 
@@ -185,7 +211,7 @@ def main():
 
         arr = [key_up, key_down]
         data_arr = struct.pack("!2?", *arr)
-        clientsocket.send(data_arr)
+        client_socket.send(data_arr)
 
         pygame.display.update()
 
