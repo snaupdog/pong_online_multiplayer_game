@@ -1,6 +1,7 @@
 import os
 import pickle
 import socket
+import struct
 import time
 
 import pygame
@@ -9,13 +10,14 @@ from pygame.locals import *
 
 from gameobj import Game
 
-mixer.init()
-mixer.music.load('assets/bg_music.wav')
+# mixer.init()
+# mixer.music.load('assets/bg_music.wav')
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 5
 
+BUFFER_SIZE = 4098
 
 PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
@@ -25,26 +27,27 @@ BLACK = (0, 0, 0)
 pwidth, pheight = 20, 100
 
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Pong Apparently')
+pygame.display.set_caption("Pong Apparently")
 
 
-bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
-bong = pygame.transform.scale(bong_img, (150, 150))
-
-bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
-bogn = pygame.transform.scale(bogn_img, (150, 150))
-
-bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
-bolll = pygame.transform.scale(bolll_img, (330, 330))
+# bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
+# bong = pygame.transform.scale(bong_img, (150, 150))
+#
+# bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
+# bogn = pygame.transform.scale(bogn_img, (150, 150))
+#
+# bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
+# bolll = pygame.transform.scale(bolll_img, (330, 330))
+#
 
 
 def draw_paddles(x, y, p, info):
     if p == 1:
         pygame.draw.rect(win, (100, 100, 100), (x, y, pwidth, pheight))
-        win.blit(bong, (x - 45, y - 35))
+        # win.blit(bong, (x - 45, y - 35))
     if p == 2:
         pygame.draw.rect(win, (200, 200, 200), (x, y, pwidth, pheight))
-        win.blit(bogn, (x - 105, y - 35))
+        # win.blit(bogn, (x - 105, y - 35))
 
 
 def draw_ball(x, y):
@@ -53,39 +56,42 @@ def draw_ball(x, y):
 
 def recieve_data():
     # this should ideally return a game object
-    data = clientsocket.recv(1024)
-    data = pickle.loads(data)
+    int_data = clientsocket.recv(BUFFER_SIZE)
+
+    data = struct.unpack("!4f", int_data)
     return data
 
 
-bg_img = pygame.image.load('assets/bg.png')
+# bg_img = pygame.image.load('assets/bg.png')
 
 
+SERVER_IP = "10.14.143.190"
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientsocket.connect(('10.1.18.2', 8000))
+clientsocket.connect((SERVER_IP, 8000))
 
-hitSound = pygame.mixer.Sound('hit.mp3')
+# hitSound = pygame.mixer.Sound('hit.mp3')
 
 
-def checkscoreupdate(prev_ball_x, prev_ball_y, current_ball_x, current_ball_y):
-    if (prev_ball_x != current_ball_x) or (prev_ball_y != current_ball_y):
-        hitSound.play()
+# def checkscoreupdate(prev_ball_x, prev_ball_y, current_ball_x, current_ball_y):
+#     if (prev_ball_x != current_ball_x) or (prev_ball_y != current_ball_y):
+#         hitSound.play()
+#
 
 
 def main():
     game_finished = False
     key_up = False
     key_down = False
-    prev_count1 = 0
-    prev_count2 = 0
+    # prev_count1 = 0
+    # prev_count2 = 0
 
-    pygame.mixer.music.play(-1)
+    # pygame.mixer.music.play(-1)
     while game_finished == False:
         # waits for other client here
         info = recieve_data()
 
-        # win.fill(PINKISH)
-        win.blit(bg_img, (0, 0))
+        win.fill(PINKISH)
+        # win.blit(bg_img, (0, 0))
 
         draw_paddles(30, info[0], 1, info)
         draw_paddles(SCREEN_WIDTH - 30 - pwidth, info[1], 2, info)
@@ -93,10 +99,9 @@ def main():
         draw_ball(info[2], info[3])
         # we can also di if score is updated instead
         # of sending another value
-        checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
-        prev_count1, prev_count2 = info[4], info[5]
+        # checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
+        # prev_count1, prev_count2 = info[4], info[5]
 
-        print()
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
@@ -110,7 +115,7 @@ def main():
                     key_down = False
 
         arr = [key_up, key_down]
-        data_arr = pickle.dumps(arr)
+        data_arr = struct.pack("!2?", *arr)
         clientsocket.send(data_arr)
 
         pygame.display.update()

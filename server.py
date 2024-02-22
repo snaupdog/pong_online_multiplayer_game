@@ -1,14 +1,16 @@
-import pickle
 import random
 import socket
+import struct
 import time
 
 import pygame
 
 from gameobj import Game
 
+SERVER_IP = "10.14.142.97"
+BUFFER_SIZE = 4098
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind(('10.1.18.2', 8000))
+serversocket.bind((SERVER_IP, 8000))
 serversocket.listen(2)
 
 connection = []
@@ -43,8 +45,10 @@ def waiting_for_connections():
 
 
 def recieve_information():
-    player_1_info = pickle.loads(connection[0].recv(1024))
-    player_2_info = pickle.loads(connection[1].recv(1024))
+    recievefrom1 = connection[0].recv(BUFFER_SIZE)
+    rcv = connection[1].recv(BUFFER_SIZE)
+    player_1_info = struct.unpack("!2?", recievefrom1)
+    player_2_info = struct.unpack("!2?", rcv)
 
     return player_1_info, player_2_info
 
@@ -54,19 +58,21 @@ last_print_time = time.time()
 while True:
     waiting_for_connections()
     # first time sends default original values in array
-    tuppyp = (
+    int_data = [
         dataaa.y1,
         dataaa.y2,
         dataaa.bx,
         dataaa.by,
-        dataaa.sc1,
-        dataaa.sc2,
-    )
+    ]
 
-    data_arr = pickle.dumps(tuppyp)
+    print("no - error")
+    print(int_data)
+    response_data = struct.pack("!4f", *int_data)
 
-    connection[0].send(data_arr)
-    connection[1].send(data_arr)
+    print("error")
+
+    connection[0].send(response_data)
+    connection[1].send(response_data)
 
     # receives and array with info [key_up,key_down(boolean)]
     player1, player2 = recieve_information()
@@ -76,7 +82,5 @@ while True:
     # Print "hello" every 5 seconds
     current_time = time.time()
     if current_time - last_print_time >= 5:
-        print(
-            f'this is player 1 : - {dataaa.sc1}\nthis is player 2 : - {dataaa.sc2}'
-        )
+        print(f"this is player 1 : - {dataaa.sc1}\nthis is player 2 : - {dataaa.sc2}")
         last_print_time = current_time
