@@ -8,7 +8,7 @@ import pygame
 from gameobj import Game
 
 SERVER_IP = "10.14.142.97"
-BUFFER_SIZE = 4098
+BUFFER_SIZE = 1028
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.bind((SERVER_IP, 8000))
 serversocket.listen(2)
@@ -33,10 +33,8 @@ dataaa = Game(
 
 def process_positions(player_1, player_2):
 
-    global ball_y_speed, ball_x_speed
     dataaa.update_paddle(player_1, player_2)
     dataaa.collisions()
-
 
 def waiting_for_connections():
     while len(connection) < 2:
@@ -63,13 +61,12 @@ while True:
         dataaa.y2,
         dataaa.bx,
         dataaa.by,
+        dataaa.sc1,
+        dataaa.sc2
     ]
 
-    print("no - error")
     print(int_data)
     response_data = struct.pack("!4f", *int_data)
-
-    print("error")
 
     connection[0].send(response_data)
     connection[1].send(response_data)

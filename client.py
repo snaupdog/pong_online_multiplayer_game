@@ -17,11 +17,16 @@ pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 5
 
-BUFFER_SIZE = 4098
+BUFFER_SIZE = 5000
 
 PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+leftscore = 0
+rightscore = 0
+won = False
+scorefont = pygame.font.SysFont("comicsans",50)
+winscore = 2
 
 
 pwidth, pheight = 20, 100
@@ -38,7 +43,6 @@ pygame.display.set_caption("Pong Apparently")
 #
 # bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
 # bolll = pygame.transform.scale(bolll_img, (330, 330))
-#
 
 
 def draw_paddles(x, y, p, info):
@@ -53,6 +57,27 @@ def draw_paddles(x, y, p, info):
 def draw_ball(x, y):
     pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
 
+def update_score(x):
+    if x<0:
+        rightscore+=1
+    elif x>SCREEN_WIDTH:
+        leftscore+=1
+
+    if leftscore >= winscore:
+        won = True
+        wintext = "Left Player Won!"
+    elif rightscore >= winscore:
+        won = True
+        wintext = "Right Player Won!"
+
+    if won:
+        text = scorefont.render(wintext, 1, WHITE)
+        win.blit(text, (SCREEN_WIDTH//2 - text.get_width() //2, SCREEN_HEIGHT//2 - text.get_height()//2))
+        pygame.display.update()
+        pygame.time.delay(2000)
+        ball.reset()
+        
+
 
 def recieve_data():
     # this should ideally return a game object
@@ -65,7 +90,7 @@ def recieve_data():
 # bg_img = pygame.image.load('assets/bg.png')
 
 
-SERVER_IP = "10.14.143.190"
+SERVER_IP = "10.14.142.97"
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientsocket.connect((SERVER_IP, 8000))
 
@@ -97,6 +122,7 @@ def main():
         draw_paddles(SCREEN_WIDTH - 30 - pwidth, info[1], 2, info)
 
         draw_ball(info[2], info[3])
+        update_score(info[2])
         # we can also di if score is updated instead
         # of sending another value
         # checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
