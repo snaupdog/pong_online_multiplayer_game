@@ -35,26 +35,35 @@ class Game:
 
     def update_paddle(self, player_1, player_2):
 
+
         if player_1[0] == True:
             self.y1 -= self.paddle_velocity
         else:
             self.y1 = self.y1
+
         if player_1[1] == True:
             self.y1 += self.paddle_velocity
-
         else:
             self.y1 = self.y1
 
         if player_2[0] == True:
             self.y2 -= self.paddle_velocity
-
         else:
             self.y2 = self.y2
+
         if player_2[1] == True:
             self.y2 += self.paddle_velocity
-
         else:
             self.y2 = self.y2
+
+        if self.y1 < -pheight:
+            self.y1 = SCREEN_HEIGHT
+        if  self.y1> SCREEN_HEIGHT:
+            self.y1 = 0
+        if  self.y2< -pheight:
+            self.y2 = SCREEN_HEIGHT
+        if  self.y2> SCREEN_HEIGHT:
+            self.y2= 0
 
     def checkreset(self):
         if self.bx < 0:
