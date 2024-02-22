@@ -24,12 +24,11 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 leftscore = 0
 rightscore = 0
-# global leftscore = 0
-# global rightscore = 0
 won = False
-scorefont = pygame.font.SysFont("comicsans",50)
+scorefont = pygame.font.SysFont("comicsans", 50)
 winscore = 2
-SERVER_IP = "10.14.143.190"
+# SERVER_IP = "10.14.143.190"
+SERVER_IP = "localhost"
 PORT = 8000
 
 
@@ -39,13 +38,13 @@ win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pong Apparently")
 
 
-bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
+bong_img = pygame.image.load(os.path.join("assets", "bong.png"))
 bong = pygame.transform.scale(bong_img, (150, 150))
 
-bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
+bogn_img = pygame.image.load(os.path.join("assets", "bogn.png"))
 bogn = pygame.transform.scale(bogn_img, (150, 150))
 
-bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
+bolll_img = pygame.image.load(os.path.join("assets", "balll.png"))
 bolll = pygame.transform.scale(bolll_img, (330, 330))
 
 
@@ -58,35 +57,38 @@ def draw_paddles(x, y, p, info):
         win.blit(bogn, (x - 112, y - 35))
 
 
-
 def draw_ball(x, y):
     pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
-    win.blit(bolll,(x -123,y-120))
+    win.blit(bolll, (x - 123, y - 120))
 
 
 def update_score(x):
-    global leftscore, rightscore, won,winscore
+    global leftscore, rightscore, won, winscore
     if x <= 0:
         rightscore += 1
-        print(x)
-        print(leftscore)
-        print(rightscore)
+        hitSound.play()
 
     elif x >= SCREEN_WIDTH:
         leftscore += 1
-        print(x)
-        print(leftscore)
-        print(rightscore)
+        hitSound.play()
 
     left_score_text = scorefont.render(str(leftscore), True, WHITE)
     right_score_text = scorefont.render(str(rightscore), True, WHITE)
 
-    win.blit(left_score_text, (SCREEN_WIDTH // 2 - 24*left_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - left_score_text.get_height() // 2))
-    win.blit(right_score_text, (SCREEN_WIDTH // 2 + 20*right_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2))
-    
-    # print(x)
-    # print(leftscore)
-    # print(rightscore)
+    win.blit(
+        left_score_text,
+        (
+            SCREEN_WIDTH // 2 - 24 * left_score_text.get_width() // 2,
+            SCREEN_HEIGHT // 2 - left_score_text.get_height() // 2,
+        ),
+    )
+    win.blit(
+        right_score_text,
+        (
+            SCREEN_WIDTH // 2 + 20 * right_score_text.get_width() // 2,
+            SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2,
+        ),
+    )
 
     if leftscore >= winscore:
         won = True
@@ -97,30 +99,15 @@ def update_score(x):
 
     if won:
         text = scorefont.render(wintext, 1, WHITE)
-        win.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
+        win.blit(
+            text,
+            (
+                SCREEN_WIDTH // 2 - text.get_width() // 2,
+                SCREEN_HEIGHT // 2 - text.get_height() // 2,
+            ),
+        )
         pygame.display.update()
         pygame.time.delay(2000)
-
-
-    # if x<0:
-    #     rightscore+=1
-    # elif x>SCREEN_WIDTH:
-    #     leftscore+=1
-    #
-    # if leftscore >= winscore:
-    #     won = True
-    #     wintext = "Left Player Won!"
-    # elif rightscore >= winscore:
-    #     won = True
-    #     wintext = "Right Player Won!"
-    #
-    # if won:
-    #     text = scorefont.render(wintext, 1, WHITE)
-    #     win.blit(text, (SCREEN_WIDTH//2 - text.get_width() //2, SCREEN_HEIGHT//2 - text.get_height()//2))
-    #     pygame.display.update()
-    #     pygame.time.delay(2000)
-    #     ball.reset()
-        
 
 
 def recieve_data():
@@ -137,21 +124,13 @@ def recieve_data():
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientsocket.connect((SERVER_IP, PORT))
 
-# hitSound = pygame.mixer.Sound('hit.mp3')
-
-
-# def checkscoreupdate(prev_ball_x, prev_ball_y, current_ball_x, current_ball_y):
-#     if (prev_ball_x != current_ball_x) or (prev_ball_y != current_ball_y):
-#         hitSound.play()
-#
+hitSound = pygame.mixer.Sound("hit.mp3")
 
 
 def main():
     game_finished = False
     key_up = False
     key_down = False
-    # prev_count1 = 0
-    # prev_count2 = 0
 
     # pygame.mixer.music.play(-1)
     while game_finished == False:
@@ -166,10 +145,6 @@ def main():
 
         draw_ball(info[2], info[3])
         update_score(info[2])
-        # we can also di if score is updated instead
-        # of sending another value
-        # checkscoreupdate(info[4], info[5], prev_count1, prev_count2)
-        # prev_count1, prev_count2 = info[4], info[5]
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

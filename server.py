@@ -7,7 +7,8 @@ import pygame
 
 from gameobj import Game
 
-SERVER_IP = "10.14.143.190"
+# SERVER_IP = "10.14.143.190"
+SERVER_IP = "localhost"
 PORT = 8000
 
 BUFFER_SIZE = 4000
@@ -28,8 +29,6 @@ dataaa = Game(
     SCREEN_HEIGHT // 2 - pheight // 2,
     SCREEN_HEIGHT // 2,
     SCREEN_WIDTH // 2,
-    0,
-    0,
 )
 
 
@@ -37,6 +36,7 @@ def process_positions(player_1, player_2):
 
     dataaa.update_paddle(player_1, player_2)
     dataaa.collisions()
+
 
 def waiting_for_connections():
     while len(connection) < 2:
@@ -53,8 +53,6 @@ def recieve_information():
     return player_1_info, player_2_info
 
 
-last_print_time = time.time()
-
 while True:
     waiting_for_connections()
     # first time sends default original values in array
@@ -65,7 +63,6 @@ while True:
         dataaa.by,
     ]
 
-    print(int_data)
     response_data = struct.pack("!4f", *int_data)
 
     connection[0].send(response_data)
@@ -75,9 +72,3 @@ while True:
     player1, player2 = recieve_information()
 
     process_positions(player1, player2)
-
-    # Print "hello" every 5 seconds
-    current_time = time.time()
-    if current_time - last_print_time >= 5:
-        print(f"this is player 1 : - {dataaa.sc1}\nthis is player 2 : - {dataaa.sc2}")
-        last_print_time = current_time

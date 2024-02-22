@@ -8,13 +8,17 @@ class Game:
 
     MAXVEL = 1
 
-    def __init__(self, y1, y2, by, bx, sc1, sc2):
+    def __init__(
+        self,
+        y1,
+        y2,
+        by,
+        bx,
+    ):
         self.y1 = y1
         self.y2 = y2
         self.x1 = 10
         self.x2 = SCREEN_WIDTH - 10 - pwidth
-        self.sc1 = 0
-        self.sc2 = 0
 
         self.by = self.origy = by
         self.bx = self.origx = bx
@@ -23,18 +27,15 @@ class Game:
         self.y_vel = 0
         self.radius = 5
 
-        self.check = False
-        self.paddle_velocity = 1
+        self.paddle_velocity = 5
 
     def reset(self):
         self.bx = self.origx
         self.by = self.origy
         self.y_vel = 0
         self.x_vel *= -1
-        self.hit = False
 
     def update_paddle(self, player_1, player_2):
-
 
         if player_1[0] == True:
             self.y1 -= self.paddle_velocity
@@ -58,21 +59,17 @@ class Game:
 
         if self.y1 < -pheight:
             self.y1 = SCREEN_HEIGHT
-        if  self.y1> SCREEN_HEIGHT:
+        if self.y1 > SCREEN_HEIGHT:
             self.y1 = 0
-        if  self.y2< -pheight:
+        if self.y2 < -pheight:
             self.y2 = SCREEN_HEIGHT
-        if  self.y2> SCREEN_HEIGHT:
-            self.y2= 0
+        if self.y2 > SCREEN_HEIGHT:
+            self.y2 = 0
 
     def checkreset(self):
         if self.bx < 0:
-            self.sc2 += 1
-            self.hit = True
             self.reset()
         elif self.bx > SCREEN_WIDTH:
-            self.sc1 += 1
-            self.hit = True
             self.reset()
 
     def move(self):
