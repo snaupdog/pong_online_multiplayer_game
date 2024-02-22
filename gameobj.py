@@ -82,7 +82,7 @@ class Game:
         # for left colls
         if self.x_vel < 0:
             if self.by >= self.y1 and self.by <= self.y1 + pheight:
-                if self.bx - self.radius <= self.x1 + pwidth:
+                if self.bx - self.radius <= self.x1 + pwidth + pwidth:
                     self.x_vel *= -1
                     midy = self.y1 + pheight / 2
                     diffy = midy - self.by
@@ -93,7 +93,7 @@ class Game:
         else:
             if self.by >= self.y2 and self.by <= self.y2 + pheight:
                 # prob X2 value
-                if self.bx + self.radius >= self.x2:
+                if self.bx + self.radius >= self.x2 - pwidth:
                     self.x_vel *= -1
 
                     midy = self.y2 + pheight / 2

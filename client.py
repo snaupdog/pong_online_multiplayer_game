@@ -15,7 +15,7 @@ from gameobj import Game
 
 pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
-BALL_RADIUS = 10
+BALL_RADIUS = 8
 
 BUFFER_SIZE = 4000
 
@@ -24,6 +24,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 leftscore = 0
 rightscore = 0
+# global leftscore = 0
+# global rightscore = 0
 won = False
 scorefont = pygame.font.SysFont("comicsans",50)
 winscore = 2
@@ -34,44 +36,57 @@ PORT = 8000
 pwidth, pheight = 20, 100
 
 win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption(f"Left:{leftscore}                                        Right:{rightscore}")
+pygame.display.set_caption("Pong Apparently")
 
 
-# bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
-# bong = pygame.transform.scale(bong_img, (150, 150))
-#
-# bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
-# bogn = pygame.transform.scale(bogn_img, (150, 150))
-#
-# bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
-# bolll = pygame.transform.scale(bolll_img, (330, 330))
+bong_img = pygame.image.load(os.path.join('assets', 'bong.png'))
+bong = pygame.transform.scale(bong_img, (150, 150))
+
+bogn_img = pygame.image.load(os.path.join('assets', 'bogn.png'))
+bogn = pygame.transform.scale(bogn_img, (150, 150))
+
+bolll_img = pygame.image.load(os.path.join('assets', 'balll.png'))
+bolll = pygame.transform.scale(bolll_img, (330, 330))
 
 
 def draw_paddles(x, y, p, info):
     if p == 1:
         pygame.draw.rect(win, (100, 100, 100), (x, y, pwidth, pheight))
-        # win.blit(bong, (x - 45, y - 35))
+        win.blit(bong, (x - 45, y - 35))
     if p == 2:
         pygame.draw.rect(win, (200, 200, 200), (x, y, pwidth, pheight))
-        # win.blit(bogn, (x - 105, y - 35))
+        win.blit(bogn, (x - 112, y - 35))
+
 
 
 def draw_ball(x, y):
     pygame.draw.circle(win, BLACK, [x, y], BALL_RADIUS)
+    win.blit(bolll,(x -123,y-120))
 
 
 def update_score(x):
     global leftscore, rightscore, won,winscore
-    if x < 0:
+    if x <= 0:
         rightscore += 1
+        print(x)
+        print(leftscore)
+        print(rightscore)
 
-    elif x > SCREEN_WIDTH:
+    elif x >= SCREEN_WIDTH:
         leftscore += 1
+        print(x)
+        print(leftscore)
+        print(rightscore)
 
+    left_score_text = scorefont.render(str(leftscore), True, WHITE)
+    right_score_text = scorefont.render(str(rightscore), True, WHITE)
 
-    print(x)
-    print(leftscore)
-    print(rightscore)
+    win.blit(left_score_text, (SCREEN_WIDTH // 2 - 24*left_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - left_score_text.get_height() // 2))
+    win.blit(right_score_text, (SCREEN_WIDTH // 2 + 20*right_score_text.get_width() // 2, SCREEN_HEIGHT // 2 - right_score_text.get_height() // 2))
+    
+    # print(x)
+    # print(leftscore)
+    # print(rightscore)
 
     if leftscore >= winscore:
         won = True
@@ -85,7 +100,6 @@ def update_score(x):
         win.blit(text, (SCREEN_WIDTH // 2 - text.get_width() // 2, SCREEN_HEIGHT // 2 - text.get_height() // 2))
         pygame.display.update()
         pygame.time.delay(2000)
-        ball.reset()
 
 
     # if x<0:
