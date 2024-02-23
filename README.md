@@ -1,4 +1,3 @@
-urm run the test py to run the game
-brhrhrhr
-
-openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 365 -nodes
+This is Pong Apparently
+It works(kinda)
+Has 1 server and 2 clients connected to server
