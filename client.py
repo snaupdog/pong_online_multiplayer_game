@@ -18,7 +18,7 @@ pygame.init()
 SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
 BALL_RADIUS = 8
 
-BUFFER_SIZE = 4000
+BUFFER_SIZE = 1028
 
 PINKISH = (250, 100, 100)
 WHITE = (255, 255, 255)
@@ -31,7 +31,7 @@ won = False
 scorefont = pygame.font.SysFont("comicsans", 50)
 winscore = 2
 
-SERVER_IP = "10.14.142.97"
+SERVER_IP = "10.1.18.95"
 # SERVER_IP = "localhost"
 
 
@@ -146,6 +146,7 @@ def main():
 
     while game_finished == False:
         # waits for other client here
+
         info = recieve_data()
 
         win.fill(PINKISH)

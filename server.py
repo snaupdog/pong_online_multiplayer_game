@@ -8,9 +8,10 @@ import pygame
 
 from gameobj import Game
 
-BUFFER_SIZE = 4000
+BUFFER_SIZE = 5000
 
-SERVER_IP = "10.14.142.97"
+
+SERVER_IP = "10.1.18.95"
 # SERVER_IP = "localhost"
 # PORT = 8000
 
@@ -78,7 +79,6 @@ while True:
         dataaa.by,
     ]
 
-    print(int_data)
     response_data = struct.pack("!4f", *int_data)
 
     connection[0].send(response_data)
@@ -88,9 +88,3 @@ while True:
     player1, player2 = recieve_information()
 
     process_positions(player1, player2)
-
-    # Print "hello" every 5 seconds
-    current_time = time.time()
-    if current_time - last_print_time >= 5:
-        print(f"this is player 1 : - {dataaa.sc1}\nthis is player 2 : - {dataaa.sc2}")
-        last_print_time = current_time
