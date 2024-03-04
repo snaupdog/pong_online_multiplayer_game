@@ -6,7 +6,6 @@ pwidth, pheight = 20, 100
 
 class Game:
 
-    MAXVEL = 15
 
     def __init__(
         self,
@@ -26,8 +25,10 @@ class Game:
         self.x_vel = self.MAXVEL
         self.y_vel = 0
         self.radius = 5
+
         self.paddle_velocity = 10
         self.angle = 2
+        self.MAXVEL = 10
 
     def reset(self):
         self.bx = self.origx
