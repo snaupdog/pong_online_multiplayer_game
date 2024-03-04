@@ -7,22 +7,14 @@ import pygame
 
 from gameobj import Game
 
-# SERVER_IP = "10.14.143.190"
-SERVER_IP = "localhost"
-PORT = 8000
+from constants import * 
 
-BUFFER_SIZE = 4000
-serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serversocket.bind((SERVER_IP, PORT))
-serversocket.listen(2)
 
 connection = []
 
-SCREEN_WIDTH, SCREEN_HEIGHT = 1000, 650
-BALL_RADIUS = 5
-
-pwidth, pheight = 20, 100
-
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversocket.bind((SERVER_IP, PORT))
+serversocket.listen(2)
 
 dataaa = Game(
     SCREEN_HEIGHT // 2 - pheight // 2,
@@ -39,9 +31,25 @@ def process_positions(player_1, player_2):
 
 
 def waiting_for_connections():
+    player_no=1
+
     while len(connection) < 2:
         conn, addr = serversocket.accept()
         connection.append(conn)
+        print(f" player {player_no} connected at {addr} ")
+        player_no+=1
+
+
+    # msg = [1]
+    # responsemsg = struct.pack("!1i",*msg)
+    # connection[0].send(responsemsg)
+
+    # msg2 = [2]
+    # responsemsg = struct.pack("!1i",*msg2)
+    # connection[1].send(responsemsg)
+
+    
+
 
 
 def recieve_information():
@@ -53,8 +61,9 @@ def recieve_information():
     return player_1_info, player_2_info
 
 
+waiting_for_connections()
+
 while True:
-    waiting_for_connections()
     # first time sends default original values in array
     int_data = [
         dataaa.y1,
@@ -65,10 +74,20 @@ while True:
 
     response_data = struct.pack("!4f", *int_data)
 
-    connection[0].send(response_data)
-    connection[1].send(response_data)
+    try : 
+        connection[0].send(response_data)
+        connection[1].send(response_data)
 
     # receives and array with info [key_up,key_down(boolean)]
-    player1, player2 = recieve_information()
+        player1, player2 = recieve_information()
+        process_positions(player1, player2)
 
-    process_positions(player1, player2)
+    except:
+        break
+try:
+    connection[0].close()
+    connection[1].close()
+    serversocket.close()
+    print("all sockets closed properly")
+except:
+    print("error closing sockets")

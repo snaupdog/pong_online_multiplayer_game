@@ -6,7 +6,7 @@ pwidth, pheight = 20, 100
 
 class Game:
 
-    MAXVEL = 4
+    MAXVEL = 15
 
     def __init__(
         self,
@@ -26,8 +26,7 @@ class Game:
         self.x_vel = self.MAXVEL
         self.y_vel = 0
         self.radius = 5
-
-        self.paddle_velocity = 5
+        self.paddle_velocity = 10
 
     def reset(self):
         self.bx = self.origx
@@ -67,6 +66,7 @@ class Game:
             self.y2 = 0
 
     def checkreset(self):
+        print(self.bx)
         if self.bx < 0:
             self.reset()
         elif self.bx > SCREEN_WIDTH:
