@@ -11,7 +11,8 @@ This project implements a multiplayer Pong game using sockets and Pygame. The ga
 
 ## Getting Started
 
-/Users/nihalsatish/Desktop/Screenshot 2024-03-04 at 2.28.24 PM.png
+<img width="997" alt="Screenshot 2024-03-04 at 2 28 24 PM" src="https://github.com/snaupdog/pong_online_multiplayer_game/assets/116204740/5e13b722-20f9-4415-b03e-96b850757ef5">
+
 
 ### Prerequisites
 
