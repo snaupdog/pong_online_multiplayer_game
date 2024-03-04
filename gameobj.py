@@ -27,7 +27,7 @@ class Game:
         self.y_vel = 0
         self.radius = 5
         self.paddle_velocity = 10
-        self.angle = 4
+        self.angle = 2
 
     def reset(self):
         self.bx = self.origx
