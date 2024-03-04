@@ -126,7 +126,7 @@ def run_game():
                 win.blit(
                     text,
                     (
-                        SCREEN_WIDTH//2,
+                        200,
                         400
                     ),
                 )
@@ -135,8 +135,8 @@ def run_game():
                 win.blit(
                     text,
                     (
-                        SCREEN_WIDTH //2,
                         200,
+                        200
                     ),
                 )
 
