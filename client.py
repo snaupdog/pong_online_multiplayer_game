@@ -28,7 +28,6 @@ def draw_ball(x, y):
 
 def update_score(x):
     global leftscore, rightscore, won, winscore
-    print(x)
     if x <= 5:
         rightscore += 1
         hitSound.play()

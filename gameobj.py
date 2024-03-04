@@ -27,6 +27,7 @@ class Game:
         self.y_vel = 0
         self.radius = 5
         self.paddle_velocity = 10
+        self.angle = 4
 
     def reset(self):
         self.bx = self.origx
@@ -66,7 +67,6 @@ class Game:
             self.y2 = 0
 
     def checkreset(self):
-        print(self.bx)
         if self.bx < 0:
             self.reset()
         elif self.bx > SCREEN_WIDTH:
@@ -94,7 +94,7 @@ class Game:
                     diffy = midy - self.by
                     reduced = (pheight / 2) / self.MAXVEL
                     self.y_vel = diffy / reduced
-                    self.y_vel = self.y_vel * -1
+                    self.y_vel = self.y_vel * -self.angle
 
         else:
             if self.by >= self.y2 and self.by <= self.y2 + pheight:
@@ -106,5 +106,5 @@ class Game:
                     diffy = midy - self.by
                     reduced = (pheight / 2) / self.MAXVEL
                     y_vel = diffy / reduced
-                    self.y_vel = y_vel * -1
+                    self.y_vel = y_vel * -self.angle
         self.move()
