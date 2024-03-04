@@ -40,6 +40,7 @@ def waiting_for_connections():
         player_no+=1
 
 
+
     # msg = [1]
     # responsemsg = struct.pack("!1i",*msg)
     # connection[0].send(responsemsg)
@@ -62,6 +63,10 @@ def recieve_information():
 
 
 waiting_for_connections()
+
+# connection[0].send("player 1")
+# connection[1].send("Plyaer 2")
+
 
 while True:
     # first time sends default original values in array

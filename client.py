@@ -104,6 +104,7 @@ bogn = pygame.transform.scale(bogn_img, (150, 150))
 bolll_img = pygame.image.load(os.path.join("assets", "balll.png"))
 bolll = pygame.transform.scale(bolll_img, (330, 330))
 
+
 def run_game():
     game_finished = False
     key_up = False
@@ -151,11 +152,6 @@ def run_game():
 
 
 
-        # if blah:
-        #     player_id = clientsocket.recv(BUFFER_SIZE)
-        #     player_id_data = struct.unpack("!1i", player_id)
-        #     print(f"this is player {player_id_data[0]}")
-        #     blah = False
 
         clock.tick(GAME_SPEED)
         # waits for other client here
