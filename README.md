@@ -11,6 +11,8 @@ This project implements a multiplayer Pong game using sockets and Pygame. The ga
 
 ## Getting Started
 
+/Users/nihalsatish/Desktop/Screenshot 2024-03-04 at 2.28.24 PM.png
+
 ### Prerequisites
 
 - Python 3.x
@@ -24,11 +26,10 @@ This project implements a multiplayer Pong game using sockets and Pygame. The ga
    
    git clone https://github.com/your-username/pong-multiplayer.git
 
-2. Navigate to project directory
+2. Navigate to project directory:
 
-    cd pong-multiplayer
-
-    pip install pygame
+        cd pong-multiplayer
+        pip install pygame
 
 3. Configure Server:
 
